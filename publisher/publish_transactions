@@ -1,0 +1,22 @@
+"""Publishes card-authorization events to Pub/Sub (the source)."""
+from __future__ import annotations
+import argparse, logging
+
+_LOGGER = logging.getLogger(__name__)
+
+def publish(project: str, topic: str, rate: int, duration: int, bad_fraction: float) -> None:
+    raise NotImplementedError  # filled in next commits
+
+def _parse_args() -> argparse.Namespace:
+    ap = argparse.ArgumentParser(description="Publish transactions to Pub/Sub.")
+    ap.add_argument("--project", required=True)
+    ap.add_argument("--topic", default="transactions-raw")
+    ap.add_argument("--rate", type=int, default=20, help="messages per second")
+    ap.add_argument("--duration", type=int, default=120, help="seconds to run")
+    ap.add_argument("--bad_fraction", type=float, default=0.05)
+    return ap.parse_args()
+
+if __name__ == "__main__":
+    logging.getLogger().setLevel(logging.INFO)
+    a = _parse_args()
+    publish(a.project, a.topic, a.rate, a.duration, a.bad_fraction)
