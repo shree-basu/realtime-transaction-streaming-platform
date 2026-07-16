@@ -23,3 +23,20 @@ TRANSACTION_BQ_SCHEMA = ",".join([
     "merchant_risk_tier:STRING", "ingest_timestamp:TIMESTAMP",
     "processing_date:DATE",
 ])
+
+AGGREGATE_BQ_SCHEMA = ",".join([
+    "customer_id:STRING", "window_start:TIMESTAMP", "window_end:TIMESTAMP",
+    "txn_count:INTEGER", "total_amount:FLOAT", "max_amount:FLOAT",
+])
+
+SESSION_BQ_SCHEMA = ",".join([
+    "customer_id:STRING", "session_start:TIMESTAMP", "session_end:TIMESTAMP",
+    "duration_seconds:FLOAT", "txn_count:INTEGER", "total_amount:FLOAT",
+])
+
+MERCHANT_REFERENCE_BQ_SCHEMA = "merchant_category:STRING,risk_tier:STRING"
+
+DEAD_LETTER_BQ_SCHEMA = ",".join([
+    "raw_payload:STRING", "error_reason:STRING",
+    "error_stage:STRING", "ingest_timestamp:TIMESTAMP",
+])
