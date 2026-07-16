@@ -40,3 +40,19 @@ DEAD_LETTER_BQ_SCHEMA = ",".join([
     "raw_payload:STRING", "error_reason:STRING",
     "error_stage:STRING", "ingest_timestamp:TIMESTAMP",
 ])
+
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass(frozen=True)
+class Transaction:
+    """Typed view of a validated transaction (docs / tests)."""
+    transaction_id: str
+    customer_id: str
+    amount: float
+    currency: str
+    event_timestamp: str
+    merchant_id: Optional[str] = None
+    merchant_category: Optional[str] = None
+    country: Optional[str] = None
+    channel: Optional[str] = None
