@@ -56,3 +56,21 @@ def _bad_event() -> dict:
     else:
         return {"__raw__": "this is not valid json at all"}
     return broken
+
+import json
+from google.cloud import pubsub_v1
+
+def publish(project, topic, rate, duration, bad_fraction):
+    batch = pubsub_v1.types.BatchSettings(max_messages=100, max_latency=0.1)
+    publisher = pubsub_v1.PublisherClient(batch_settings=batch)
+    topic_path = publisher.topic_path(project, topic)
+
+    payload = _bad_event() if random.random() < bad_fraction else _good_event()
+    if payload.get("__raw__"):
+        data, attrs = payload["__raw__"].encode("utf-8"), {}
+    else:
+        data = json.dumps(payload).encode("utf-8")
+        attrs = {"channel": str(payload.get("channel", "NA")),
+                 "currency": str(payload.get("currency", "NA"))}
+    publisher.publish(topic_path, data=data,
+                      ordering_key=str(payload.get("customer_id", "")), **attrs)
