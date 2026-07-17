@@ -42,3 +42,17 @@ def _good_event() -> dict:
         "country": random.choice(COUNTRIES),
         "channel": random.choice(CHANNELS),
     }
+
+def _bad_event() -> dict:
+    """Break a rule so the dead-letter path can be exercised in dev."""
+    broken = _good_event()
+    choice = random.choice(["amount", "currency", "missing", "json"])
+    if choice == "amount":
+        broken["amount"] = -5.0
+    elif choice == "currency":
+        broken["currency"] = "XYZ"
+    elif choice == "missing":
+        broken.pop("customer_id")
+    else:
+        return {"__raw__": "this is not valid json at all"}
+    return broken
